@@ -15,6 +15,11 @@ def login():
         return redirect('/success')
     return render_template('login.html', title='Авторизация', form=form)
 
+@app.route('/')
+def index():
+    session = db_session.create_session()
+    job = session.query(Jobs).all()
+    return render_template('index.html', job=job)
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
