@@ -1,0 +1,33 @@
+  
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Works log</h1>
+{% for item in jobs%}
+
+    <table width="100%" border="1" cellspacing="0" cellpadding="4">
+
+        <caption> Action {{item.id}}</caption>
+  <tr class="table-secondary">
+
+    <th>Title of activity</th>
+      <th>timlid</th>
+      <th>Duration</th>
+      <th>List of colaborations</th>
+      <th>Is finished</th>
+  </tr>
+        <tr class="table-success">
+
+    <td>{{item.job}}</td>
+      <td>{{item.team_leader}}</td>
+      <td>{{item.work_size}}</td>
+      <td>{{item.collaborators}}</td>
+      <td>{{item.is_finished}}</td>
+  </tr>
+
+</table>
+
+
+
+{% endfor %}
+{% endblock %}
