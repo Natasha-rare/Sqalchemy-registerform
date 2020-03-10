@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Логин', validators=[DataRequired()])
+    email = StringField('Почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
@@ -21,3 +21,11 @@ class RegisterForm(FlaskForm):
     speciality = StringField('Speciality', validators=[DataRequired()])
     address = StringField('Address', validators=[DataRequired()])
     submit = SubmitField('Войти')
+
+class JobsForm(FlaskForm):
+    team_leader = IntegerField('Team leader id', validators=[DataRequired()])
+    job = StringField('Job title', validators=[DataRequired()])
+    work_size = IntegerField('Work size', validators=[DataRequired()])
+    collaborators = StringField('Collaboratos', validators=[DataRequired()])
+    is_finished = BooleanField('Is job finished?', validators=[DataRequired()], default=False)
+    submit = SubmitField('Submit')

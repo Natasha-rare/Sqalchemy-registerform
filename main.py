@@ -1,25 +1,69 @@
 from flask import Flask, redirect, render_template
 from data import db_session
-from data.loginform import LoginForm, RegisterForm
+from data.loginform import LoginForm, RegisterForm, JobsForm
+from flask_login import LoginManager, login_user, logout_user, login_required
 from data.users import User
 from data.jobs import Jobs
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    session = db_session.create_session()
+    return session.query(User).get(user_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        return redirect('/success')
+        session = db_session.create_session()
+        user = session.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
     return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route('/addjob', methods=['GET', 'POST'])
+def addjob():
+    form = JobsForm()
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        if session:
+            job = Jobs(team_leader=form.team_leader.data,
+            job=form.job.data,
+            work_size=form.work_size.data,
+            collaborators=form.collaborators.data,
+            is_finished=form.is_finished.data
+            )
+            session.add(job)
+            session.commit()
+            return redirect("/")
+        return redirect('/logout')
+    return render_template('addjob.html', title='44', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
 
 @app.route('/')
 def index():
     session = db_session.create_session()
     job = session.query(Jobs).all()
     return render_template('index.html', job=job)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
