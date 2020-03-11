@@ -19,12 +19,14 @@ def load_user(user_id):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    global captain
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
         user = session.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
+            captain = user.id
             return redirect("/")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
@@ -48,7 +50,7 @@ def addjob():
             session.commit()
             return redirect("/")
         return redirect('/logout')
-    return render_template('addjob.html', title='44', form=form)
+    return render_template('addjob.html',h='Добавление работы', title='44', form=form)
 
 
 @app.route('/logout')
@@ -97,6 +99,32 @@ def reqister():
 @app.route('/success')
 def success():
     return render_template('success.html', title='Отправлено')
+
+caption = 1
+
+@app.route('/change')
+def change():
+    global captain
+    print(captain)
+    form = JobsForm()
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        if session:
+            if captain == 1 or captain == form.team_leader.data:
+                job = Jobs(team_leader=form.team_leader.data,
+                           job=form.job.data,
+                           work_size=form.work_size.data,
+                           collaborators=form.collaborators.data,
+                           is_finished=form.is_finished.data
+                           )
+                session.add(job)
+                session.commit()
+                return redirect("/")
+            else:
+                return render_template('success.html', title='Вы не можете изменить работу')
+        else:
+            return redirect('/logout')
+    return render_template('addjob.html', title='44', h='Изменение работы', form=form)
 
 
 def main():

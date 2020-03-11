@@ -27,5 +27,5 @@ class JobsForm(FlaskForm):
     job = StringField('Job title', validators=[DataRequired()])
     work_size = IntegerField('Work size', validators=[DataRequired()])
     collaborators = StringField('Collaboratos', validators=[DataRequired()])
-    is_finished = BooleanField('Is job finished?', validators=[DataRequired()], default=False)
+    is_finished = BooleanField('Is job finished?', default=False)
     submit = SubmitField('Submit')
