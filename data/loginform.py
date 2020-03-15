@@ -16,16 +16,15 @@ class RegisterForm(FlaskForm):
     password_again = PasswordField('Repeat password', validators=[DataRequired()])
     surname = StringField("Surname", validators=[DataRequired()])
     name = StringField('Name', validators=[DataRequired()])
-    age = IntegerField('Age', validators=[DataRequired()])
-    position = StringField('Position', validators=[DataRequired()])
-    speciality = StringField('Speciality', validators=[DataRequired()])
-    address = StringField('Address', validators=[DataRequired()])
+    class1 = IntegerField('Class', validators=[DataRequired()])
     submit = SubmitField('Войти')
 
-class JobsForm(FlaskForm):
-    team_leader = IntegerField('Team leader id', validators=[DataRequired()])
-    job = StringField('Job title', validators=[DataRequired()])
-    work_size = IntegerField('Work size', validators=[DataRequired()])
-    collaborators = StringField('Collaboratos', validators=[DataRequired()])
-    is_finished = BooleanField('Is job finished?', default=False)
+
+class TimeTableForm(FlaskForm):
+    day = IntegerField('Day of the week', validators=[DataRequired()])
+    lesson = StringField('Lesson', validators=[DataRequired()])
+    lesson_number = IntegerField('Number of lesson', validators=[DataRequired()])
+    # teacher_name = StringField('Teacher name', validators=[DataRequired()])
+    homework = StringField('Homework', validators=[DataRequired()])
+    notes = StringField('Notes', validators=[DataRequired()])
     submit = SubmitField('Submit')

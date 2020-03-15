@@ -1,1 +1,1 @@
-from . import users, jobs, departments
+from . import teachers, timetable, users
