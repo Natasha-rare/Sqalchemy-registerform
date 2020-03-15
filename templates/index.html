@@ -8,7 +8,7 @@
 </p>
 {%set days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']%}
 {% for i in range(5)%}
-  <h2>Day # {{days[i]}}</h2>
+  <h2>{{days[i]}}</h2>
      <table class="table table-borderless">
     <thead>
       <tr class="table-active">
@@ -22,7 +22,7 @@
       <tr>
         <th scope="row">1</th>
         {% for item in timetable%}
-        {%if item.day == 1 and item.lesson_number == 1%}
+        {%if item.day == i + 1 and item.lesson_number == 1%}
           <td class="table-success">{{item.lesson}}</td>
           <td class="table-success">{{item.homework}}</td>
           <td class="table-success">{{item.notes}}</td>
@@ -32,7 +32,7 @@
     <tr>
         <th scope="row">2</th>
         {% for item in timetable%}
-        {%if item.day == 1 and item.lesson_number == 2%}
+        {%if item.day == i + 1 and item.lesson_number == 2%}
           <td class="table-success">{{item.lesson}}</td>
           <td class="table-success">{{item.homework}}</td>
           <td class="table-success">{{item.notes}}</td>
@@ -42,7 +42,7 @@
     <tr>
         <th scope="row">3</th>
         {% for item in timetable%}
-        {%if item.day == 1 and item.lesson_number == 3%}
+        {%if item.day == i + 1 and item.lesson_number == 3%}
           <td class="table-success">{{item.lesson}}</td>
           <td class="table-success">{{item.homework}}</td>
           <td class="table-success">{{item.notes}}</td>
@@ -52,7 +52,7 @@
     <tr>
         <th scope="row">4</th>
         {% for item in timetable%}
-        {%if item.day == 1 and item.lesson_number == 4%}
+        {%if item.day == i + 1 and item.lesson_number == 4%}
           <td class="table-success">{{item.lesson}}</td>
           <td class="table-success">{{item.homework}}</td>
           <td class="table-success">{{item.notes}}</td>
@@ -62,7 +62,7 @@
     <tr>
         <th scope="row">5</th>
         {% for item in timetable%}
-        {%if item.day == 1 and item.lesson_number == 5%}
+        {%if item.day == i + 1 and item.lesson_number == 5%}
           <td class="table-success">{{item.lesson}}</td>
           <td class="table-success">{{item.homework}}</td>
           <td class="table-success">{{item.notes}}</td>

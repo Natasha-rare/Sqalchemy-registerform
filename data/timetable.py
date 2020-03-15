@@ -15,4 +15,4 @@ class TimeTable(SqlAlchemyBase):
     lesson_number = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
     # teacher_name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     homework = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    notes = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    notes = sqlalchemy.Column(sqlalchemy.String, default='')
