@@ -4,9 +4,19 @@
     <h1>{{ h }}</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.id.label }}<br>
+            {{ form.id }}<br>
+            {% for error in form.id.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
         <p>
             {{ form.day.label }}<br>
-            {{ form.day(class="form-control") }}<br>
+            {{ form.day }}<br>
             {% for error in form.day.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
@@ -15,7 +25,7 @@
         </p>
         <p>
             {{ form.lesson.label }}<br>
-            {{ form.lesson(class="form-control") }}<br>
+            {{ form.lesson }}<br>
             {% for error in form.lesson.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
@@ -24,7 +34,7 @@
         </p>
         <p>
             {{ form.lesson_number.label }}<br>
-            {{ form.lesson_number(class="form-control") }}<br>
+            {{ form.lesson_number }}<br>
             {% for error in form.lesson_number.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
@@ -33,7 +43,7 @@
         </p>
         <p>
             {{ form.homework.label }}<br>
-            {{ form.homework(class="form-control") }}<br>
+            {{ form.homework }}<br>
             {% for error in form.homework.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}
@@ -42,7 +52,7 @@
         </p>
         <p>
             {{ form.notes.label }}<br>
-            {{ form.notes(class="form-control") }}<br>
+            {{ form.notes }}<br>
             {% for error in form.notes.errors %}
                 <div class="alert alert-danger" role="alert">
                     {{ error }}

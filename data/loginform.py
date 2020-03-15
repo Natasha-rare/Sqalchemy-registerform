@@ -21,10 +21,10 @@ class RegisterForm(FlaskForm):
 
 
 class TimeTableForm(FlaskForm):
-    day = IntegerField('Day of the week', validators=[DataRequired()])
-    lesson = StringField('Lesson', validators=[DataRequired()])
-    lesson_number = IntegerField('Number of lesson', validators=[DataRequired()])
-    # teacher_name = StringField('Teacher name', validators=[DataRequired()])
-    homework = StringField('Homework', validators=[DataRequired()])
-    notes = StringField('Notes', validators=[DataRequired()])
+    day = IntegerField('Day of the week', default=1)
+    lesson = StringField('Lesson', default='Математика')
+    lesson_number = IntegerField('Number of lesson', default=1)
+    homework = StringField('Homework', default='Не задано')
+    notes = StringField('Notes', default='Можете отдохнуть ^.^')
     submit = SubmitField('Submit')
+

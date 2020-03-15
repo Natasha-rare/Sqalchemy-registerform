@@ -1,4 +1,4 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, request, abort
 from data import db_session
 from data.loginform import TimeTableForm, LoginForm, RegisterForm
 from flask_login import LoginManager, login_user, logout_user, login_required
@@ -20,14 +20,12 @@ def load_user(teacher):
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    global captain
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
         user = session.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            captain = user.id
             return redirect("/")
         return render_template('login.html',
                                message="Неправильный логин или пароль",
@@ -51,7 +49,7 @@ def addtimetable():
             session.commit()
             return redirect("/")
         return redirect('/logout')
-    return render_template('addtimetable.html', h='Добавление работы', title='44', form=form)
+    return render_template('addtimetable.html', h='Добавление расписания', title='Добавление расписания', form=form)
 
 
 @app.route('/logout')
@@ -99,24 +97,35 @@ def success():
     return render_template('success.html', title='Отправлено')
 
 
-@app.route('/change')
-def change():
+@app.route('/change/<int:id>', methods=['GET', 'POST'])
+@app.route('/change', methods=['GET', 'POST'])
+def changetimetable(id=1):
     form = TimeTableForm()
-    session = db_session.create_session()
-    if form.validate_on_submit():
-        if session:
-            timetable = TimeTable(id=form.id.data,
-                                  day=form.day.data,
-                                  lesson=form.lesson.data,
-                                  lesson_number=form.lesson_number.data,
-                                  homework=form.homework.data,
-                                  notes=form.notes.data
-                                  )
-            session.commit()
-            return redirect("/")
+    if request.method == "GET":
+        session = db_session.create_session()
+        timetable = session.query(TimeTable).filter(TimeTable.id == id).first()
+        if timetable:
+            form.day.data = timetable.day
+            form.lesson.data = timetable.lesson
+            form.lesson_number.data = timetable.lesson_number
+            form.homework.data = timetable.homework
+            form.notes.data = timetable.notes
         else:
-            return redirect('/logout')
-    return render_template('addjob.html', title='44', h='Изменение работы', form=form)
+            abort(404)
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        timetable = session.query(TimeTable).filter(TimeTable.id == id).first()
+        if timetable:
+            timetable.day = form.day.data
+            timetable.lesson = form.lesson.data
+            timetable.lesson_number = form.lesson_number.data
+            timetable.homework = form.homework.data
+            timetable.notes = form.notes.data
+            session.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('addtimetable.html', title='Редактирование расписания', h='Редактирование расписания', form=form)
 
 
 def main():
