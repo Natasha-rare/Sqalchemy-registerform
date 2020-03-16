@@ -20,6 +20,9 @@
     </p>
 {% endif %}
 </nav>
+{% if current_user.is_authenticated %}
+        <a class="btn btn-secondary" href="/addjob">Добавить работу</a>
+    {% endif %}
 
 <h4>И на Марсе будут яблони цвести!</h4>
 

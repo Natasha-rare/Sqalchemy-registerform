@@ -97,6 +97,18 @@ def index():
     job = session.query(Jobs).all()
     return render_template('index.html', job=job)
 
+@app.route('/jobs_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def news_delete(id):
+    session = db_session.create_session()
+    jobs = session.query(Jobs).filter(Jobs.id == id,
+                                      (Jobs.team_leader == 1) | (Jobs.team_leader == current_user.id)).first()
+    if jobs:
+        session.delete(jobs)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/')
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
