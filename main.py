@@ -1,7 +1,7 @@
-from flask import Flask, redirect, render_template
+from flask import Flask, redirect, render_template, abort, request
 from data import db_session
 from data.loginform import LoginForm, RegisterForm, JobsForm
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
 from data.jobs import Jobs
 
@@ -48,7 +48,7 @@ def addjob():
             session.commit()
             return redirect("/")
         return redirect('/logout')
-    return render_template('addjob.html', title='44', form=form)
+    return render_template('addjob.html', title='Добавление работы', form=form)
 
 
 @app.route('/logout')
@@ -56,6 +56,39 @@ def addjob():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/jobs/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_jobs(id):
+    form = JobsForm()
+    if request.method == "GET":
+        session = db_session.create_session()
+        jobs = session.query(Jobs).filter(Jobs.id == id,
+                                          (Jobs.team_leader == 1)|(Jobs.team_leader == current_user.id)).first()
+        if jobs:
+            form.team_leader.data = jobs.team_leader
+            form.job.data = jobs.job
+            form.work_size.data = jobs.work_size
+            form.collaborators.data = jobs.collaborators
+            form.is_finished.data = jobs.is_finished
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        jobs = session.query(Jobs).filter(Jobs.id == id,
+                                          Jobs.team_leader == 1).first()
+        if jobs:
+            jobs.team_leader = form.team_leader.data
+            jobs.job = form.job.data
+            jobs.work_size = form.work_size.data
+            jobs.collaborators = form.collaborators.data
+            jobs.is_finished = form.is_finished.data
+            session.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('addjob.html', title='Редактирование работы', form=form)
 
 
 @app.route('/')
@@ -102,62 +135,6 @@ def success():
 def main():
     db_session.global_init("db/blogs.sqlite")
     app.run()
-
-    # session = db_session.create_session()
-    #
-    # user = User()
-    # user.surname = "Scott"
-    # user.name = "Ridley"
-    # user.age = 21
-    # user.position = "captain"
-    # user.speciality = "research engineer"
-    # user.address = "module_1"
-    # user.email = "scott_chief@mars.org"
-    # user.hashed_password = "cap"
-    # session.add(user)
-    #
-    # user2 = User()
-    # user2.surname = "Alan"
-    # user2.name = "Lay"
-    # user2.age = 32
-    # user2.position = "pilot"
-    # user2.speciality = "main pilot"
-    # user2.address = "module_2"
-    # user2.email = "alan_pilot@mars.org"
-    # user2.hashed_password = "tolip"
-    # session.add(user2)
-    #
-    # user3 = User()
-    # user3.surname = "Mark"
-    # user3.name = "Toy"
-    # user3.age = 27
-    # user3.position = "student"
-    # user3.speciality = "enjineer"
-    # user3.address = "module_3"
-    # user3.email = "student_mark@mars.org"
-    # user3.hashed_password = "stu_dent"
-    # session.add(user3)
-    #
-    # user4 = User()
-    # user4.surname = "John"
-    # user4.name = "Porter"
-    # user4.age = 28
-    # user4.position = "doctor"
-    # user4.speciality = "main doctor"
-    # user4.address = "module_7"
-    # user4.email = "john_d@mars.org"
-    # user4.hashed_password = "doc_porter"
-    # session.add(user4)
-    # session.commit()
-    #
-    # job = Jobs()
-    # job.team_leader = 1
-    # job.job = 'deployment of residential modules 1 and 2'
-    # job.work_size = 15
-    # job.collaborators = '2, 3'
-    # job.is_finished = False
-    # session.add(job)
-    # session.commit()
 
 
 if __name__ == '__main__':
