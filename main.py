@@ -77,7 +77,7 @@ def edit_jobs(id):
     if form.validate_on_submit():
         session = db_session.create_session()
         jobs = session.query(Jobs).filter(Jobs.id == id,
-                                          Jobs.team_leader == 1).first()
+                                          (Jobs.team_leader == 1) | (Jobs.team_leader == current_user.id)).first()
         if jobs:
             jobs.team_leader = form.team_leader.data
             jobs.job = form.job.data
