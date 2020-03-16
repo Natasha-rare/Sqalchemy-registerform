@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ h }}</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.id.label }}<br>
+            {{ form.id }}<br>
+            {% for error in form.id.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.day.label }}<br>
+            {{ form.day }}<br>
+            {% for error in form.day.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.lesson.label }}<br>
+            {{ form.lesson }}<br>
+            {% for error in form.lesson.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.lesson_number.label }}<br>
+            {{ form.lesson_number }}<br>
+            {% for error in form.lesson_number.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.homework.label }}<br>
+            {{ form.homework }}<br>
+            {% for error in form.homework.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes }}<br>
+            {% for error in form.notes.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        <div>{{ message }}</div>
+    </form>
+{% endblock %}

@@ -2,34 +2,85 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Works log</h1>
-{% for item in job%}
-<h2>Action # {{item.id}}</h2>
-   <table class="table table-borderless">
-  <thead>
-    <tr class="table-active">
-      <th scope="col">Title of activity</th>
-      <th scope="col">Team leader</th>
-      <th scope="col">Duration</th>
-      <th scope="col">List of collaborators</th>
-      <th scope="col">Is finished</th>
-    </tr>
-  </thead>
-  <tbody>
+<h1>Расписание</h1>
+<p>
+  <a class="btn btn-primary " href="/change">Изменить расписание</a>
+    <a class="btn btn-primary " href="/addtimetable">Добавить расписание</a>
+</p>
+{%set days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']%}
+{% for i in range(5)%}
+  <h2>{{days[i]}}</h2>
+     <table class="table table-borderless">
+    <thead>
+      <tr class="table-active">
+        <th scope="col">Lesson_number</th>
+        <th scope="col">Lesson</th>
+        <th scope="col">Homework</th>
+        <th scope="col">Notes</th>
+          <th scope="col">Id</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        {% for item in timetable%}
+        {%if item.day == i + 1 and item.lesson_number == 1%}
+          <td class="table-success">{{item.lesson}}</td>
+          <td class="table-success">{{item.homework}}</td>
+          <td class="table-success">{{item.notes}}</td>
+          <td class="table-success">{{item.id}}</td>
+        {%endif%}
+        {%endfor%}
+      </tr>
     <tr>
-      <td class="table-success">{{item.job}}</td>
-      <td class="table-success">{{item.team_leader}}</td>
-      <td class="table-success">{{item.work_size}} hours</td>
-      <td class="table-success">{{item.collaborators}}</td>
-      {%if item.is_finished%}
-        <td class="table-success">Is finished</td>
-      {%else%}
-        <td class="table-danger">Is not finished</td>
-      {%endif%}
-    </tr>
-  </tbody>
-</table>
+        <th scope="row">2</th>
+        {% for item in timetable%}
+        {%if item.day == i + 1 and item.lesson_number == 2%}
+          <td class="table-success">{{item.lesson}}</td>
+          <td class="table-success">{{item.homework}}</td>
+          <td class="table-success">{{item.notes}}</td>
+        <td class="table-success">{{item.id}}</td>
+        {%endif%}
+        {%endfor%}
+      </tr>
+    <tr>
+        <th scope="row">3</th>
+        {% for item in timetable%}
+        {%if item.day == i + 1 and item.lesson_number == 3%}
+          <td class="table-success">{{item.lesson}}</td>
+          <td class="table-success">{{item.homework}}</td>
+          <td class="table-success">{{item.notes}}</td>
+        <td class="table-success">{{item.id}}</td>
+        {%endif%}
+        {%endfor%}
+      </tr>
+    <tr>
+        <th scope="row">4</th>
+        {% for item in timetable%}
+        {%if item.day == i + 1 and item.lesson_number == 4%}
+          <td class="table-success">{{item.lesson}}</td>
+          <td class="table-success">{{item.homework}}</td>
+          <td class="table-success">{{item.notes}}</td>
+        <td class="table-success">{{item.id}}</td>
+        {%endif%}
+        {%endfor%}
+      </tr>
+    <tr>
+        <th scope="row">5</th>
+        {% for item in timetable%}
+        {%if item.day == i + 1 and item.lesson_number == 5%}
+          <td class="table-success">{{item.lesson}}</td>
+          <td class="table-success">{{item.homework}}</td>
+          <td class="table-success">{{item.notes}}</td>
+        <td class="table-success">{{item.id}}</td>
+        {%endif%}
+        {%endfor%}
+      </tr>
 
+
+
+    </tbody>
+  </table>
 
 
 {% endfor %}
