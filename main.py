@@ -1,9 +1,10 @@
 from flask import Flask, redirect, render_template, abort, request
 from data import db_session
-from data.loginform import LoginForm, RegisterForm, JobsForm
+from data.loginform import LoginForm, RegisterForm, JobsForm, DepartmentForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.users import User
 from data.jobs import Jobs
+from data.departments import Departments
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -46,7 +47,7 @@ def addjob():
             )
             session.add(job)
             session.commit()
-            return redirect("/")
+            return redirect("/departments")
         return redirect('/logout')
     return render_template('addjob.html', title='Добавление работы', form=form)
 
@@ -56,6 +57,52 @@ def addjob():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/department/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_department(id):
+    form = DepartmentForm()
+    if request.method == "GET":
+        session = db_session.create_session()
+        department = session.query(Departments).filter(Departments.id == id).first()
+        if department:
+            form.title.data = department.title
+            form.members.data = department.members
+            form.chief.data = department.chief
+            form.email.data = department.email
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        department = session.query(Departments).filter(Departments.id == id).first()
+        if department:
+            department.title = form.title.data
+            department.members = form.members.data
+            department.chief = form.chief.data
+            department.email = form.email.data
+            session.commit()
+            return redirect('/departments')
+        else:
+            abort(404)
+    return render_template('addepartment.html', title='Редактирование департамента', form=form)
+
+
+@app.route('/adddepartment', methods=['GET', 'POST'])
+def adddepartment():
+    form = DepartmentForm()
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        if session:
+            department = Departments(title=form.title.data,
+            chief=form.chief.data,
+            members=form.members.data,
+            email=form.email.data)
+            session.add(department)
+            session.commit()
+            return redirect("/")
+        return redirect('/logout')
+    return render_template('addepartment.html', title='Добавление департамента', form=form)
 
 
 @app.route('/jobs/<int:id>', methods=['GET', 'POST'])
@@ -90,6 +137,12 @@ def edit_jobs(id):
             abort(404)
     return render_template('addjob.html', title='Редактирование работы', form=form)
 
+@app.route('/departments')
+def department():
+    session = db_session.create_session()
+    department = session.query(Departments).all()
+    return render_template('department.html', department=department)
+
 
 @app.route('/')
 def index():
@@ -99,7 +152,7 @@ def index():
 
 @app.route('/jobs_delete/<int:id>', methods=['GET', 'POST'])
 @login_required
-def news_delete(id):
+def jobs_delete(id):
     session = db_session.create_session()
     jobs = session.query(Jobs).filter(Jobs.id == id,
                                       (Jobs.team_leader == 1) | (Jobs.team_leader == current_user.id)).first()
@@ -143,6 +196,18 @@ def reqister():
 def success():
     return render_template('success.html', title='Отправлено')
 
+
+@app.route('/department_delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def department_delete(id):
+    session = db_session.create_session()
+    department = session.query(Departments).filter(Departments.id == id).first()
+    if department:
+        session.delete(department)
+        session.commit()
+    else:
+        abort(404)
+    return redirect('/departments')
 
 def main():
     db_session.global_init("db/blogs.sqlite")

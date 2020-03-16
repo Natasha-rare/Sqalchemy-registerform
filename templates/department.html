@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <a class="btn btn-secondary" href="/">Перейти к работе</a>
+{% endif %}
+{% for item in department%}
+<h2>Action # {{item.id}}</h2>
+   <table class="table table-borderless">
+  <thead>
+    <tr class="table-active">
+      <th scope="col">Title of department</th>
+      <th scope="col">Chief</th>
+      <th scope="col">Members</th>
+      <th scope="col">Department email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="table-success">{{item.title}}</td>
+      <td class="table-success">{{item.chief}}</td>
+      <td class="table-success">{{item.members}}</td>
+      <td class="table-success">{{item.email}}</td>
+    </tr>
+  {% if current_user.is_authenticated and (current_user == item.user or current_user.id == 1) %}
+        <tr>
+            <td>
+            <a href="/department/{{ item.id }}" class="btn btn-warning">Изменить</a>
+            </td>
+            <td>
+            <a href="/department_delete/{{ item.id }}" class="btn btn-danger">Удалить</a>
+            </td>
+        </tr>
+    {% endif %}
+  </tbody>
+</table>
+
+
+{% endfor %}
+{% endblock %}

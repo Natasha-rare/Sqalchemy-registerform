@@ -29,3 +29,11 @@ class JobsForm(FlaskForm):
     collaborators = StringField('Collaboratos', validators=[DataRequired()])
     is_finished = BooleanField('Is job finished?', default=False)
     submit = SubmitField('Submit')
+
+
+class DepartmentForm(FlaskForm):
+    title = StringField('Title')
+    chief = StringField('Chief')
+    members = StringField('Members')
+    email = StringField('Email')
+    submit = SubmitField('Submit')
