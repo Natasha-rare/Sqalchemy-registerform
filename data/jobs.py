@@ -3,9 +3,9 @@ import sqlalchemy
 from sqlalchemy import orm
 
 from .db_session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
 
-
-class Jobs(SqlAlchemyBase):
+class Jobs(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'jobs'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -21,4 +21,4 @@ class Jobs(SqlAlchemyBase):
                                    default=datetime.datetime.now)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
-    user = orm.relation('User')
+    # user = orm.relation('User')

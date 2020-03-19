@@ -22,6 +22,7 @@ class RegisterForm(FlaskForm):
     address = StringField('Address', validators=[DataRequired()])
     submit = SubmitField('Войти')
 
+
 class JobsForm(FlaskForm):
     team_leader = IntegerField('Team leader id', validators=[DataRequired()])
     job = StringField('Job title', validators=[DataRequired()])
